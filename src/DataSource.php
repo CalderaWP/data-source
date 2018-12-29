@@ -44,11 +44,23 @@ class DataSource extends Module implements DataSourceContract
 		return $this;
 	}
 
+	/**
+	 * Get source by class name
+	 *
+	 * @param string $className
+	 *
+	 * @return Source
+	 */
 	public function getSource(string $className): Source
 	{
 		return $this->sources[$className];
 	}
 
+	/**
+	 * @param ServiceContainer $container
+	 *
+	 * @return CalderaModule
+	 */
 	public function registerServices(ServiceContainer $container): CalderaModule
 	{
 

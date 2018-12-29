@@ -3,10 +3,9 @@
 
 namespace calderawp\caldera\DataSource\Contracts;
 
-interface SourceContract
+
+interface SourceContract extends Crud, Query
 {
 
 
-	public function getCrud(): Crud;
-	public function getQuery(): Query;
 }
