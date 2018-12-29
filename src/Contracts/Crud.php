@@ -41,7 +41,7 @@ interface Crud
 	 * @return Result
 	 * @throws InvalidColumnException
 	 */
-	public function anonymize(int $id,string $column):Result;
+	public function anonymize(int $id, string $column):Result;
 	/**
 	 * Delete a row by primary key
 	 *

@@ -12,8 +12,8 @@ class DataSourceTest extends TestCase
 	 */
 	public function testGetIdentifier()
 	{
-		$dataSource = new DataSource($this->core(),$this->serviceContainer());
-		$this->assertSame(DataSource::IDENTIFIER,$dataSource->getIdentifier());
+		$dataSource = new DataSource($this->core(), $this->serviceContainer());
+		$this->assertSame(DataSource::IDENTIFIER, $dataSource->getIdentifier());
 	}
 	/**
 	 * @covers \calderawp\caldera\DataSource\DataSource::addSource()
@@ -21,28 +21,27 @@ class DataSourceTest extends TestCase
 	 */
 	public function testAddGetSource()
 	{
-		$source = \Mockery::mock('FormsSource', \calderawp\caldera\DataSource\Contracts\SourceContract::class );
-		$dataSource = new DataSource($this->core(),$this->serviceContainer());
-		$dataSource->addSource($source );
-		$this->assertSame($source, $dataSource->getSource(get_class($source) ) );
+		$source = \Mockery::mock('FormsSource', \calderawp\caldera\DataSource\Contracts\SourceContract::class);
+		$dataSource = new DataSource($this->core(), $this->serviceContainer());
+		$dataSource->addSource($source);
+		$this->assertSame($source, $dataSource->getSource(get_class($source)));
 	}
 	/**
 	 * @covers \calderawp\caldera\DataSource\DataSource::registerServices()
 	 */
 	public function testRegisterServices()
 	{
-		$dataSource = new DataSource($this->core(),$this->serviceContainer());
+		$dataSource = new DataSource($this->core(), $this->serviceContainer());
 		$this->assertInstanceOf(DataSource::class, $dataSource->registerServices($dataSource->getServiceContainer()));
-
 	}
 	/**
 	 * @covers \calderawp\caldera\DataSource\DataSource::getSources()
 	 */
 	public function testGetSources()
 	{
-		$source = \Mockery::mock('FormsSource', \calderawp\caldera\DataSource\Contracts\SourceContract::class );
-		$dataSource = new DataSource($this->core(),$this->serviceContainer());
-		$dataSource->addSource($source );
-		$this->assertCount(1,$dataSource->getSources( ) );
+		$source = \Mockery::mock('FormsSource', \calderawp\caldera\DataSource\Contracts\SourceContract::class);
+		$dataSource = new DataSource($this->core(), $this->serviceContainer());
+		$dataSource->addSource($source);
+		$this->assertCount(1, $dataSource->getSources());
 	}
 }

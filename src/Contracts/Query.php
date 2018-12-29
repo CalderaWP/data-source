@@ -2,6 +2,7 @@
 
 
 namespace calderawp\caldera\DataSource\Contracts;
+
 use WpDbTools\Type\Result;
 use calderawp\DB\Exceptions\InvalidColumnException;
 
@@ -15,8 +16,8 @@ interface Query
 	 * @return Result
 	 * @throws InvalidColumnException
 	 */
-	public function findWhere(string $column,  $value) : Result;
-	public function findIn(array $ins, string $column ) : Result;
+	public function findWhere(string $column, $value) : Result;
+	public function findIn(array $ins, string $column) : Result;
 	/**
 	 * Find a record by primary key
 	 *
@@ -24,5 +25,4 @@ interface Query
 	 * @return Result
 	 */
 	public function findById(int $id) : Result;
-
 }
