@@ -6,10 +6,10 @@ namespace calderawp\caldera\DataSource;
 use calderawp\CalderaContainers\Service\Container as ServiceContainer;
 use calderawp\interop\Contracts\CalderaModule;
 use calderawp\interop\Module;
-use calderawp\caldera\DataSource\Contracts\DataSourceContract;
+use calderawp\caldera\DataSource\Contracts\CalderaDataSourceContract;
 use calderawp\caldera\DataSource\Contracts\SourceContract as Source;
 
-class DataSource extends Module implements DataSourceContract
+class CalderaDataSource extends Module implements CalderaDataSourceContract
 {
 	const IDENTIFIER  = 'dataSource';
 
@@ -26,7 +26,7 @@ class DataSource extends Module implements DataSourceContract
 	}
 
 	/**
-	 * @return DataSourceContract[]
+	 * @return CalderaDataSourceContract[]
 	 */
 	public function getSources(): array
 	{
@@ -36,9 +36,9 @@ class DataSource extends Module implements DataSourceContract
 	/**
 	 * @param Source $source
 	 *
-	 * @return DataSource
+	 * @return CalderaDataSource
 	 */
-	public function addSource(Source $source): DataSource
+	public function addSource(Source $source): CalderaDataSourceContract
 	{
 		$this->sources[get_class($source)] = $source;
 		return $this;

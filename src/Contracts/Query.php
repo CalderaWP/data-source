@@ -16,13 +16,13 @@ interface Query
 	 * @return Result
 	 * @throws InvalidColumnException
 	 */
-	public function findWhere(string $column, $value) : Result;
-	public function findIn(array $ins, string $column) : Result;
+	public function findWhere(string $column, $value) : array;
+	public function findIn(array $ins, string $column) : array;
 	/**
 	 * Find a record by primary key
 	 *
 	 * @param  $id
 	 * @return Result
 	 */
-	public function findById(int $id) : Result;
+	public function findById(int $id) : array;
 }
