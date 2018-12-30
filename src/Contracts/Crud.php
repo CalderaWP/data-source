@@ -24,7 +24,7 @@ interface Crud
 	 * @param  int $id
 	 * @return array
 	 */
-	public function read(int $id): array ;
+	public function read(int $id): array;
 	/**
 	 * Update a record
 	 *
