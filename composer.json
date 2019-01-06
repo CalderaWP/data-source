@@ -1,6 +1,6 @@
 {
-  "name": "calderawp/php-boilerplate",
-  "description": "A boilerplate for new composer based PHP projects.",
+  "name": "calderawp/data-source",
+  "description": "Caldera data sourcing",
   "license": "GPL-2.0",
   "require": {
     "php": "^7.2"
