@@ -1,28 +1,23 @@
-# PHP Boilerplate
+# Caldera Data Source
 
-A boilerplate for new composer based PHP projects.
+This package provides a layer between the source of data and consumption. The idea is that if the database and other sources of data have the same interface, it will not matter what database -- or API -- the data comes from.
 
-## Getting started
+This is used in the forms package for the database, but not for the REST API, which is a bit suspect.
 
-```bash
-# With composer
-$ composer create-project kreait/php-boilerplate new-project
+## Usage
 
-# With git
-$ git clone git@github.com:kreait/php-boilerplate.git new-project && cd $_ && rm -rf .git && git init
-```
+### Install
 
-### Update `composer.json`
+### Examples
 
-Replace the Namespaces in the `autoload` and `autoload-dev` sections with your project's namespaces
-and run `composer dump-autoload`.
 
-### (Optional) Update `.gitattributes`
-
-Remove the comments in `.gitattributes` so that unneeded files for your package won't get included in your releases.
-
-### (Optional) Add `composer.lock` to the `.gitignore` file
-
-If you're creating an application instead of a library, it is considered good practice to commit the `composer.lock` file together with the rest of the code.
-
-### Start coding! :smile:
+## Testing
+* Run unit tests
+    - `composer test:unit`
+* Run integration tests
+    - `composer test:integration`
+* Run acceptance tests
+    - `composer test:acceptance`
+    
+## License, Copyright, etc.
+Copyright 2018+ CalderaWP LLC and licensed under the terms of the GNU GPL license. Please share with your neighbor.
