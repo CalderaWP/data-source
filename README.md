@@ -16,6 +16,10 @@ This is used in the forms package for the database, but not for the REST API, wh
 ## Usage
 
 ### Install
+* Add to your package:
+    - `composer require calderawp/http`
+* Install for development:
+    - `git clone git@github.com:CalderaWP/http.git && composer install`
 
 ### Examples
 
