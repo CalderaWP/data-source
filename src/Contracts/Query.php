@@ -17,6 +17,15 @@ interface Query
 	 * @throws InvalidColumnException
 	 */
 	public function findWhere(string $column, $value) : array;
+
+	/**
+	 * Find with an in() query
+	 *
+	 * @param array $ins
+	 * @param string $column
+	 *
+	 * @return array
+	 */
 	public function findIn(array $ins, string $column) : array;
 	/**
 	 * Find a record by primary key
