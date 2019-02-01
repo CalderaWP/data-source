@@ -25,12 +25,13 @@ This is used in the forms package for the database, but not for the REST API, wh
 
 
 ## Testing
+* Run unit tests and integration tests
+    - `composer tests`
 * Run unit tests
     - `composer test:unit`
 * Run integration tests
     - `composer test:integration`
-* Run acceptance tests
-    - `composer test:acceptance`
+
     
 ## License, Copyright, etc.
 Copyright 2018+ CalderaWP LLC and licensed under the terms of the GNU GPL license. Please share with your neighbor.

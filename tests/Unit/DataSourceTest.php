@@ -1,8 +1,9 @@
 <?php
 
-namespace calderawp\caldera\DataSource\Tests;
+namespace calderawp\caldera\DataSource\Tests\Unit;
 
 use calderawp\caldera\DataSource\CalderaDataSource;
+use calderawp\caldera\DataSource\Tests\TestCase;
 
 class DataSourceTest extends TestCase
 {
