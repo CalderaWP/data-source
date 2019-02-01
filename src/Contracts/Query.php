@@ -13,7 +13,7 @@ interface Query
 	 *
 	 * @param  string           $column Column to search in
 	 * @param  string|int|float $value  Value to search by
-	 * @return Result
+	 * @return array
 	 * @throws InvalidColumnException
 	 */
 	public function findWhere(string $column, $value) : array;
@@ -31,7 +31,7 @@ interface Query
 	 * Find a record by primary key
 	 *
 	 * @param  $id
-	 * @return Result
+	 * @return array
 	 */
 	public function findById(int $id) : array;
 }
