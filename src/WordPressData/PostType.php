@@ -23,10 +23,10 @@ class PostType implements WordPressPostTypeContract
 	public function create(array $data): int
 	{
 		$idOrError = wp_insert_post($data);
-		if( is_numeric($idOrError)){
+		if (is_numeric($idOrError)) {
 			return (int)$idOrError;
 		}
-		throw new Exception($idOrError->get_error_message(), $idOrError->get_error_code() );
+		throw new Exception($idOrError->get_error_message(), $idOrError->get_error_code());
 	}
 
 	/**
@@ -34,11 +34,11 @@ class PostType implements WordPressPostTypeContract
 	 */
 	public function read(int $id): array
 	{
-		$post = get_post($id,ARRAY_A);
-		if( is_array($post)){
+		$post = get_post($id, ARRAY_A);
+		if (is_array($post)) {
 			return $post;
 		}
-		throw new Exception('Not Found', 404 );
+		throw new Exception('Not Found', 404);
 	}
 
 	/**
@@ -48,10 +48,10 @@ class PostType implements WordPressPostTypeContract
 	{
 		$data[ 'ID' ] = $id;
 		$idOrError = wp_update_post($data);
-		if( is_numeric($idOrError)){
+		if (is_numeric($idOrError)) {
 			return $this->read($idOrError);
 		}
-		throw new Exception($idOrError->get_error_message(), $idOrError->get_error_code() );
+		throw new Exception($idOrError->get_error_message(), $idOrError->get_error_code());
 	}
 
 	/**
@@ -60,9 +60,9 @@ class PostType implements WordPressPostTypeContract
 	public function anonymize(int $id, string $column): array
 	{
 		$post = $this->read($id);
-		if( isset( $post[$column])){
+		if (isset($post[$column])) {
 			$post[$column] = 'XXXX';
-			return $this->update($id,$post);
+			return $this->update($id, $post);
 		}
 		return $post;
 	}
@@ -80,26 +80,26 @@ class PostType implements WordPressPostTypeContract
 	 */
 	public function findWhere(string $column, $value): array
 	{
-		if( ! in_array( $column, $this->getQueryColumns() )){
+
+		if (! in_array($column, $this->getQueryColumns())) {
 			throw new InvalidColumnException();
 		}
 		$args = [
 			'post_type' => $this->getPostType()
 		];
 
-		switch( $column ){
-			case 'ID' :
+		switch ($column) {
+			case 'ID':
 				$args[ 'p' ] = (int) $value;
 				break;
 			case 'title':
 				$args[ 'title' ] =  $value;
 				break;
-				case 'parent_id';
+			case 'parent_id';
 				$args[ 'post_parent'] = (int) $value;
 				break;
-
 		}
-	 	return get_posts($args);
+		return get_posts($args);
 	}
 
 	/**
@@ -107,21 +107,20 @@ class PostType implements WordPressPostTypeContract
 	 */
 	public function findIn(array $ins, string $column): array
 	{
-		if( ! in_array( $column, $this->getQueryColumns() )){
+		if (! in_array($column, $this->getQueryColumns())) {
 			throw new InvalidColumnException();
 		}
 		$args = [
 			'post_type' => $this->getPostType()
 		];
 
-		switch( $column ){
+		switch ($column) {
 			case 'ID':
 				$args[ 'post__in' ] = $ins;
 				break;
 			case 'parent_id';
 				$args[ 'post_parent__in'] = $ins;
 				break;
-
 		}
 		return get_posts($args);
 	}

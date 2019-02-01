@@ -3,7 +3,6 @@
 
 namespace calderawp\caldera\DataSource\Contracts;
 
-
 interface WordPressPostTypeContract extends SourceContract
 {
 
@@ -12,7 +11,7 @@ interface WordPressPostTypeContract extends SourceContract
 	 *
 	 * @return array
 	 */
-	public function getQueryColumns(): array ;
+	public function getQueryColumns(): array;
 
 
 	public function getPostType() : string;
