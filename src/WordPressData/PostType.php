@@ -3,16 +3,18 @@
 
 namespace calderawp\caldera\DataSource\WordPressData;
 
-use calderawp\caldera\DataSource\Contracts\Crud;
+use calderawp\caldera\DataSource\Contracts\WordPressPostTypeContract;
 use calderawp\caldera\DataSource\Exception;
 use calderawp\DB\Exceptions\InvalidColumnException;
+use WpDbTools\Type\Result;
 
-class PostType implements Crud
+class PostType implements WordPressPostTypeContract
 {
-	/** @var \WP_Query */
-	protected $wpQuery;
-	public function __construct(string $postType,\WP_Query $WPQuery)
+	/** @var string  */
+	protected $postType;
+	public function __construct(string $postType)
 	{
+		$this->postType = $postType;
 	}
 
 	/**
@@ -73,4 +75,78 @@ class PostType implements Crud
 		return false != wp_delete_post($id);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function findWhere(string $column, $value): array
+	{
+		if( ! in_array( $column, $this->getQueryColumns() )){
+			throw new InvalidColumnException();
+		}
+		$args = [
+			'post_type' => $this->getPostType()
+		];
+
+		switch( $column ){
+			case 'ID' :
+				$args[ 'p' ] = (int) $value;
+				break;
+			case 'title':
+				$args[ 'title' ] =  $value;
+				break;
+				case 'parent_id';
+				$args[ 'post_parent'] = (int) $value;
+				break;
+
+		}
+	 	return get_posts($args);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function findIn(array $ins, string $column): array
+	{
+		if( ! in_array( $column, $this->getQueryColumns() )){
+			throw new InvalidColumnException();
+		}
+		$args = [
+			'post_type' => $this->getPostType()
+		];
+
+		switch( $column ){
+			case 'ID':
+				$args[ 'post__in' ] = $ins;
+				break;
+			case 'parent_id';
+				$args[ 'post_parent__in'] = $ins;
+				break;
+
+		}
+		return get_posts($args);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function findById(int $id): array
+	{
+		return $this->read($id);
+	}
+
+	/** @inheritdoc */
+	public function getQueryColumns(): array
+	{
+		return [
+			'ID',
+			'title',
+			'parent_id'
+		];
+	}
+
+	/** @inheritdoc */
+	public function getPostType(): string
+	{
+		return $this->postType;
+	}
 }
