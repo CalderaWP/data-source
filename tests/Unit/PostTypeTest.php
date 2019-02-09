@@ -24,7 +24,6 @@ class PostTypeTest extends TestCase
 		Functions\when('wp_insert_post')->justReturn(1);
 		$postType = new PostType('a');
 		$this->assertSame(1, $postType->create([]));
-
 	}
 
 	/** @covers \calderawp\caldera\DataSource\WordPressData\PostType::create() */
@@ -106,7 +105,6 @@ class PostTypeTest extends TestCase
 
 		$postType = new PostType('a');
 		$this->assertSame($expected, $postType->findWhere('ID', $title));
-
 	}
 
 	/** @covers \calderawp\caldera\DataSource\WordPressData\PostType::findWhere() */
@@ -119,7 +117,6 @@ class PostTypeTest extends TestCase
 			->andReturn($expected);
 		$postType = new PostType('a');
 		$this->assertSame($expected, $postType->findWhere('ID', 1));
-
 	}
 
 	/** @covers \calderawp\caldera\DataSource\WordPressData\PostType::findWhere() */
@@ -130,7 +127,6 @@ class PostTypeTest extends TestCase
 
 		$postType = new PostType('a');
 		$this->assertSame($expected, $postType->findWhere('parent_id', 1));
-
 	}
 
 
@@ -141,7 +137,6 @@ class PostTypeTest extends TestCase
 
 		$postType = new PostType('a');
 		$postType->findWhere('rando', 1);
-
 	}
 
 	/** @covers \calderawp\caldera\DataSource\WordPressData\PostType::findIn() */
