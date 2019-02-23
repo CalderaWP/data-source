@@ -24,6 +24,20 @@ This is used in the forms package for the database, but not for the REST API, wh
 ### Examples
 
 
+```php
+use calderawp\DB\Factory;
+use calderawp\interop\Attribute;
+calderawp\interop\Collections\Attributes;
+
+$tableName = 'cf_whatever';
+$primaryKey = 'id';
+$indexes = ['name'];
+
+$tableSchema = $factory->tableSchema([], $tableName, $primaryKey, $indexes);
+
+```
+
+
 ## Testing
 * Run unit tests and integration tests
     - `composer tests`
