@@ -20,13 +20,14 @@ class PostTypeFactoryTest extends TestCase
 	{
 		$data = new \stdClass();
 		$postTypeArgs = [ 'labels' => []];
-		$register = function ($calledName,$calledArgs) use ($data){
+		$register = function ($calledName, $calledArgs) use ($data) {
 			$data->args = $calledArgs;
 			$data->name = $calledName;
 		};
-		$registerMeta= function (){};
+		$registerMeta= function () {
+		};
 		$dbFactory = new Factory();
-		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,\Mockery::mock(\wpdb::class ) );
+		$factory = new PostTypeFactory($register, $registerMeta, $dbFactory, \Mockery::mock(\wpdb::class));
 
 		$attribute  = Attribute::fromArray([
 			'name' => 'desc',
@@ -44,44 +45,46 @@ class PostTypeFactoryTest extends TestCase
 		]);
 
 		$attributes = (new Attributes())->addAttribute($attribute)->addAttribute($idAttribute);
-		$postType = $factory->postTypeWithMeta('the-name', $postTypeArgs,$attributes );
-		$this->assertInstanceOf( PostTypeWithCustomMetaTable::class, $postType );
-		$this->assertEquals('the-name',$postType->getPostType());
-		$this->assertEquals( 'the-name', $data->name );
-
-
+		$postType = $factory->postTypeWithMeta('the-name', $postTypeArgs, $attributes);
+		$this->assertInstanceOf(PostTypeWithCustomMetaTable::class, $postType);
+		$this->assertEquals('the-name', $postType->getPostType());
+		$this->assertEquals('the-name', $data->name);
 	}
 
 	public function test__construct()
-	{		$registerMeta= function (){};
+	{
+		$registerMeta= function () {
+		};
 
-		$wpdb = \Mockery::mock(\wpdb::class );
-		$register = function (){};
+		$wpdb = \Mockery::mock(\wpdb::class);
+		$register = function () {
+		};
 		$dbFactory = \Mockery::mock(Factory::class);
-		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,$wpdb );
-		$this->assertAttributeEquals( $register, 'registerPostType', $factory );
-		$this->assertAttributeEquals( $dbFactory, 'dbFactory', $factory );
-
+		$factory = new PostTypeFactory($register, $registerMeta, $dbFactory, $wpdb);
+		$this->assertAttributeEquals($register, 'registerPostType', $factory);
+		$this->assertAttributeEquals($dbFactory, 'dbFactory', $factory);
 	}
 
 	/**
 	 * @covers \calderawp\caldera\DataSource\WordPressData\PostTypeFactory::postType()
 	 */
 	public function testPostType()
-	{		$registerMeta= function (){};
+	{
+		$registerMeta= function () {
+		};
 
 		$data = new \stdClass();
 		$postTypeArgs = [ 'labels' => []];
-		$register = function ($calledName,$calledArgs) use ($data){
+		$register = function ($calledName, $calledArgs) use ($data) {
 			$data->args = $calledArgs;
 			$data->name = $calledName;
 		};
 		$dbFactory = \Mockery::mock(Factory::class);
-		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,\Mockery::mock(\wpdb::class ) );
-		$postType = $factory->postType('the-name', $postTypeArgs );
-		$this->assertInstanceOf( PostType::class, $postType );
+		$factory = new PostTypeFactory($register, $registerMeta, $dbFactory, \Mockery::mock(\wpdb::class));
+		$postType = $factory->postType('the-name', $postTypeArgs);
+		$this->assertInstanceOf(PostType::class, $postType);
 
-		$this->assertEquals('the-name',$postType->getPostType());
-		$this->assertEquals( 'the-name', $data->name );
+		$this->assertEquals('the-name', $postType->getPostType());
+		$this->assertEquals('the-name', $data->name);
 	}
 }

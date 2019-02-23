@@ -24,7 +24,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 	 *
 	 * @param callable $registerPostType Should be register_post_type()
 	 */
-	public function __construct(callable $registerPostType, callable $registerMeta,DbFactory $dbFactory, \wpdb $wpdb)
+	public function __construct(callable $registerPostType, callable $registerMeta, DbFactory $dbFactory, \wpdb $wpdb)
 	{
 		$this->registerPostType = $registerPostType;
 		$this->registerMeta = $registerMeta;
@@ -78,8 +78,8 @@ class PostTypeFactory implements PostTypeFactoryContract
 		$this->registerPostType($postTypeName, $postTypeArgs);
 		$tableName = $postTypeName . '_' . 'meta';
 
-		foreach ($attributes->toArray() as $attribute ){
-			call_user_func($this->registerMeta,$postTypeName, Attribute::fromArray($attribute) );
+		foreach ($attributes->toArray() as $attribute) {
+			call_user_func($this->registerMeta, $postTypeName, Attribute::fromArray($attribute));
 		}
 		$attributes->addAttribute($postIdAttribute);
 
@@ -106,7 +106,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 			'hierarchical' => false,
 			'menu_position' => null,
 			'supports' => ['title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'],
-		],$args);
+		], $args);
 	}
 
 	/**

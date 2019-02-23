@@ -136,6 +136,10 @@ class PostTypeWithCustomMetaTable extends PostType
 			}
 		}
 
+		if( empty( $prepared[ 'post' ]['post_title'] ) ){
+			$prepared[ 'post' ][ 'post_title' ] = md5(serialize($prepared));
+		}
+
 		return $prepared;
 	}
 
