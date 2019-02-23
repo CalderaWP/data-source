@@ -16,6 +16,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 	/** @var DbFactory */
 	protected $dbFactory;
 	protected $registerPostType;
+	protected $registerMeta;
 	protected $wpdb;
 
 	/**
@@ -23,9 +24,10 @@ class PostTypeFactory implements PostTypeFactoryContract
 	 *
 	 * @param callable $registerPostType Should be register_post_type()
 	 */
-	public function __construct(callable $registerPostType, DbFactory $dbFactory, \wpdb $wpdb)
+	public function __construct(callable $registerPostType, callable $registerMeta,DbFactory $dbFactory, \wpdb $wpdb)
 	{
 		$this->registerPostType = $registerPostType;
+		$this->registerMeta = $registerMeta;
 		$this->dbFactory = $dbFactory;
 		$this->wpdb = $wpdb;
 	}
@@ -70,11 +72,17 @@ class PostTypeFactory implements PostTypeFactoryContract
 			'type' => 'integer',
 			'required' => true,
 			'description' => 'Identifier for post',
+			'sqlDescriptor' => 'int(11) unsigned NOT NULL',
 		]);
 
 		$this->registerPostType($postTypeName, $postTypeArgs);
 		$tableName = $postTypeName . '_' . 'meta';
+
+		foreach ($attributes->toArray() as $attribute ){
+			call_user_func($this->registerMeta,$postTypeName, Attribute::fromArray($attribute) );
+		}
 		$attributes->addAttribute($postIdAttribute);
+
 		$tableSchema = $this->dbFactory->tableSchema($attributes->toArray(), $tableName, $primaryKey, $indexes);
 		$metaTable = $this->dbFactory->wordPressDatabaseTable($tableSchema, $this->wpdb);
 		$postType = new PostTypeWithCustomMetaTable($postTypeName);
@@ -85,7 +93,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 
 	protected function postTypeArgs(array $args): array
 	{
-		return array_merge($args, [
+		return array_merge([
 			'show_in_rest' => true,
 			'labels' => [],
 			'public' => true,
@@ -98,7 +106,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 			'hierarchical' => false,
 			'menu_position' => null,
 			'supports' => ['title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'],
-		]);
+		],$args);
 	}
 
 	/**

@@ -24,8 +24,9 @@ class PostTypeFactoryTest extends TestCase
 			$data->args = $calledArgs;
 			$data->name = $calledName;
 		};
+		$registerMeta= function (){};
 		$dbFactory = new Factory();
-		$factory = new PostTypeFactory($register,$dbFactory,\Mockery::mock(\wpdb::class ) );
+		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,\Mockery::mock(\wpdb::class ) );
 
 		$attribute  = Attribute::fromArray([
 			'name' => 'desc',
@@ -52,11 +53,12 @@ class PostTypeFactoryTest extends TestCase
 	}
 
 	public function test__construct()
-	{
+	{		$registerMeta= function (){};
+
 		$wpdb = \Mockery::mock(\wpdb::class );
 		$register = function (){};
 		$dbFactory = \Mockery::mock(Factory::class);
-		$factory = new PostTypeFactory($register,$dbFactory,$wpdb );
+		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,$wpdb );
 		$this->assertAttributeEquals( $register, 'registerPostType', $factory );
 		$this->assertAttributeEquals( $dbFactory, 'dbFactory', $factory );
 
@@ -66,7 +68,8 @@ class PostTypeFactoryTest extends TestCase
 	 * @covers \calderawp\caldera\DataSource\WordPressData\PostTypeFactory::postType()
 	 */
 	public function testPostType()
-	{
+	{		$registerMeta= function (){};
+
 		$data = new \stdClass();
 		$postTypeArgs = [ 'labels' => []];
 		$register = function ($calledName,$calledArgs) use ($data){
@@ -74,7 +77,7 @@ class PostTypeFactoryTest extends TestCase
 			$data->name = $calledName;
 		};
 		$dbFactory = \Mockery::mock(Factory::class);
-		$factory = new PostTypeFactory($register,$dbFactory,\Mockery::mock(\wpdb::class ) );
+		$factory = new PostTypeFactory($register,$registerMeta,$dbFactory,\Mockery::mock(\wpdb::class ) );
 		$postType = $factory->postType('the-name', $postTypeArgs );
 		$this->assertInstanceOf( PostType::class, $postType );
 
