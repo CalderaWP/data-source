@@ -32,6 +32,12 @@ class PostTypeFactory implements PostTypeFactoryContract
 		$this->wpdb = $wpdb;
 	}
 
+
+	public function prefixTableName(string $tableName) :string
+	{
+		return "{$this->wpdb->prefix}{$tableName}";
+	}
+
 	/**
 	 * Register a WordPress Post type
 	 *
@@ -76,7 +82,7 @@ class PostTypeFactory implements PostTypeFactoryContract
 		]);
 
 		$this->registerPostType($postTypeName, $postTypeArgs);
-		$tableName = $postTypeName . '_' . 'meta';
+		$tableName = $this->prefixTableName($postTypeName . '_' . 'meta');
 
 		foreach ($attributes->toArray() as $attribute) {
 			call_user_func($this->registerMeta, $postTypeName, Attribute::fromArray($attribute));
