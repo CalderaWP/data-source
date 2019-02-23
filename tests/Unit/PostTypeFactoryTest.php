@@ -47,7 +47,7 @@ class PostTypeFactoryTest extends TestCase
 		$this->assertInstanceOf( PostTypeWithCustomMetaTable::class, $postType );
 		$this->assertEquals('the-name',$postType->getPostType());
 		$this->assertEquals( 'the-name', $data->name );
-		$this->assertEquals( $postTypeArgs, $data->args );
+
 
 	}
 
@@ -80,6 +80,5 @@ class PostTypeFactoryTest extends TestCase
 
 		$this->assertEquals('the-name',$postType->getPostType());
 		$this->assertEquals( 'the-name', $data->name );
-		$this->assertEquals( $postTypeArgs, $data->args );
 	}
 }

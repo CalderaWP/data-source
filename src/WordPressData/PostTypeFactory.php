@@ -4,12 +4,13 @@
 namespace calderawp\caldera\DataSource\WordPressData;
 
 use calderawp\caldera\DataSource\Exception;
+use calderawp\caldera\DataSource\WordPressData\Contracts\PostTypeFactoryContract;
 use calderawp\DB\Table;
 use calderawp\DB\Factory as DbFactory;
 use calderawp\interop\Attribute;
 use calderawp\interop\Collections\Attributes;
 
-class PostTypeFactory
+class PostTypeFactory implements PostTypeFactoryContract
 {
 
 	/** @var DbFactory */
@@ -43,7 +44,6 @@ class PostTypeFactory
 
 		$this->registerPostType($postTypeName, $postTypeArgs);
 		return new PostType($postTypeName);
-
 	}
 
 	/**
@@ -80,7 +80,6 @@ class PostTypeFactory
 		$postType = new PostTypeWithCustomMetaTable($postTypeName);
 		$postType->setMetaTable($metaTable);
 		return $postType;
-
 	}
 
 
