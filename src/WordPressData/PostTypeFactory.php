@@ -63,16 +63,43 @@ class PostTypeFactory
 		array $postTypeArgs,
 		Attributes $attributes,
 		string $primaryKey = 'id',
-		array $indexes = []
+		array $indexes = ['post_id']
 	): PostTypeWithCustomMetaTable {
-		$this->registerPostType($postTypeName,$postTypeArgs);
+		$postIdAttribute = Attribute::fromArray([
+			'name' => 'post_id',
+			'type' => 'integer',
+			'required' => true,
+			'description' => 'Identifier for post',
+		]);
+
+		$this->registerPostType($postTypeName, $postTypeArgs);
 		$tableName = $postTypeName . '_' . 'meta';
+		$attributes->addAttribute($postIdAttribute);
 		$tableSchema = $this->dbFactory->tableSchema($attributes->toArray(), $tableName, $primaryKey, $indexes);
-		$metaTable = $this->dbFactory->wordPressDatabaseTable($tableSchema,$this->wpdb);
+		$metaTable = $this->dbFactory->wordPressDatabaseTable($tableSchema, $this->wpdb);
 		$postType = new PostTypeWithCustomMetaTable($postTypeName);
 		$postType->setMetaTable($metaTable);
 		return $postType;
 
+	}
+
+
+	protected function postTypeArgs(array $args): array
+	{
+		return array_merge($args, [
+			'show_in_rest' => true,
+			'labels' => [],
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui' => true,
+			'show_in_menu' => false,
+			'query_var' => true,
+			'capability_type' => 'post',
+			'has_archive' => true,
+			'hierarchical' => false,
+			'menu_position' => null,
+			'supports' => ['title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments'],
+		]);
 	}
 
 	/**
@@ -83,7 +110,7 @@ class PostTypeFactory
 	 */
 	private function registerPostType(string $postTypeName, array $postTypeArgs): void
 	{
-		$postTypeObject = call_user_func($this->registerPostType, $postTypeName, $postTypeArgs);
+		$postTypeObject = call_user_func($this->registerPostType, $postTypeName, $this->postTypeArgs($postTypeArgs));
 		if ($postTypeObject instanceof \WP_Error) {
 			throw new Exception(sprintf('Could not register post type %s', $postTypeName));
 		}
