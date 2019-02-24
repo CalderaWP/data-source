@@ -111,7 +111,8 @@ class PostType implements WordPressPostTypeContract
 			throw new InvalidColumnException();
 		}
 		$args = [
-			'post_type' => $this->getPostType()
+			'post_type' => $this->getPostType(),
+			'post_status' => 'any'
 		];
 
 		switch ($column) {
