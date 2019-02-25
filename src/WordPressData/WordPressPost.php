@@ -4,16 +4,220 @@
 namespace calderawp\caldera\DataSource\WordPressData;
 
 
-class WordPressPost
+use calderawp\caldera\DataSource\WordPressData\Contracts\PostContract as Post;
+use calderawp\caldera\Messaging\Traits\SimpleRepository;
+
+class WordPressPost implements Post
 {
 
+	use SimpleRepository;
 
-	public function toArray(): array {
+
+	/**
+	 * Get post Id
+	 *
+	 * @return int
+	 */
+	public function getId(): int
+	{
+		return $this->get('id', 0);
+	}
+
+	/**
+	 * Set post Id
+	 * @param int $id
+	 *
+	 * @return WordPressPost
+	 */
+	public function setId(int $id): Post
+	{
+		return $this->set('id', $id);
+	}
+
+	/**
+	 * Get post title
+	 *
+	 * @return string
+	 */
+	public function getTitle(): string
+	{
+		return $this->getItemThatIsRepresentedWithArray('title')['rendered'];
+	}
+
+	/**
+	 * Set post title
+	 *
+	 * @param string $title
+	 *
+	 * @return WordPressPost
+	 */
+	public function setTitle(string $title): Post
+	{
+		return $this->setValueRepresentedWithArray($title, 'title');
+	}
+
+	/**
+	 * Set post except
+	 *
+	 * @param string $excerpt
+	 *
+	 * @return WordPressPost
+	 */
+	public function setExcerpt(string $excerpt): Post
+	{
+		return $this->setValueRepresentedWithArray($excerpt, 'excerpt');
 
 	}
 
-	public static function fromArray(array  $items= []) : WordPressPost{
+	/**
+	 * Get post excerpt
+	 *
+	 * @return string
+	 */
+	public function getExcerpt(): string
+	{
+		return $this->getItemThatIsRepresentedWithArray('excerpt')['rendered'];
 
 	}
+
+	/**
+	 * Set post content
+	 *
+	 * @param string $content
+	 *
+	 * @return WordPressPost
+	 */
+	public function setContent(string $content): Post
+	{
+		return $this->setValueRepresentedWithArray($content, 'content');
+	}
+
+	/**
+	 * Get post content
+	 *
+	 * @return string
+	 */
+	public function getContent(): string
+	{
+		return $this->getItemThatIsRepresentedWithArray('content')['rendered'];
+
+	}
+
+	/**
+	 * Set the GUID
+	 *
+	 * @param string $guid
+	 *
+	 * @return WordPressPost
+	 */
+	public function setGuid(string $guid): Post
+	{
+		return $this->setValueRepresentedWithArray($guid, 'guid');
+
+	}
+
+	/**
+	 * Get the GUID
+	 *
+	 * @param string $guid
+	 *
+	 * @return WordPressPost
+	 */
+	public function getGuid(): string
+	{
+		return $this->getItemThatIsRepresentedWithArray('guid')['rendered'];
+
+	}
+
+
+	public function getAllowedProperties(): array
+	{
+		return [
+			'id',
+			'date',
+			'date_gmt',
+			'guid',
+			'modified',
+			'modified_gmt',
+			'slug',
+			'status',
+			'type',
+			'title',
+			'content',
+			'excerpt',
+			'author',
+			'featured_media',
+			'comment_status',
+			'ping_status',
+			'sticky',
+			'template',
+			'format',
+			'meta',
+			'categories',
+			'tags',
+			'link',
+
+		];
+	}
+
+	public static function fromArray(array $items = []): WordPressPost
+	{
+		$obj = new static;
+		foreach ($items as $key => $item) {
+			if (in_array($key, [
+				'title',
+				'content',
+				'excerpt',
+				'guid',
+			])) {
+				if (is_array($item)) {
+					$obj->set($key, $item);
+				} else {
+					$obj->set($key, [
+						'rendered' => $item,
+					]);
+				}
+			} else {
+				if ($obj->allowed($key)) {
+					$obj->set($key, $item);
+				}
+			}
+		}
+		return $obj;
+	}
+
+	/**
+	 * @param $key
+	 *
+	 * @return array
+	 */
+	private function getItemThatIsRepresentedWithArray($key) : array
+	{
+		$item = $this->get($key, [
+			'rendered' => '',
+		]);
+		if (!isset($item[ 'rendered' ])) {
+			$this->set($key, [
+				'rendered' => '',
+			]);
+			$item = $this->get($key);
+		}
+		return $item;
+	}
+
+	/**
+	 * @param string $value
+	 * @param $key
+	 *
+	 * @return  $this
+	 */
+	private function setValueRepresentedWithArray(string $value, $key): WordPressPost
+	{
+		$item = $this->getItemThatIsRepresentedWithArray($key);
+		$item[ 'rendered' ] = $value;
+		$this->set($key, $item);
+		return $this;
+	}
+
 
 }

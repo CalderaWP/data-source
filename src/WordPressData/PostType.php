@@ -5,6 +5,7 @@ namespace calderawp\caldera\DataSource\WordPressData;
 
 use calderawp\caldera\DataSource\Contracts\WordPressPostTypeContract;
 use calderawp\caldera\DataSource\Exception;
+use calderawp\caldera\Messaging\Traits\SimpleRepository;
 use calderawp\DB\Exceptions\InvalidColumnException;
 use WpDbTools\Type\Result;
 
@@ -36,7 +37,7 @@ class PostType implements WordPressPostTypeContract
 	{
 		$post = get_post($id, ARRAY_A);
 		if (is_array($post)) {
-			return $post;
+			return  WordPressPost::fromArray($post);
 		}
 		throw new Exception('Not Found', 404);
 	}

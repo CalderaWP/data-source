@@ -9,13 +9,86 @@ class WpPostTest extends TestCase
 {
 
 
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getId()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setId()
+	 */
+	public function testGetSetId()
+	{
+		$post = new WordPressPost();
+		$post->setId(7);
+		$this->assertSame(7, $post->getId());
+	}
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setTitle()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getTitle()
+	 */
+	public function testGetSetTitle()
+	{
+		$title = '<h1>h6</h1>';
+		$post = new WordPressPost();
+		$post->setTitle($title);
+		$this->assertSame($title, $post->getTitle($title));
+	}
 
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setContent()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getContent()
+	 */
+	public function testGetSetContent()
+	{
+		$content = '<h1>h6</h1>';
+		$post = new WordPressPost();
+		$post->setContent($content);
+		$this->assertSame($content, $post->getContent($content));
+		$content = 'new content';
+		$post->setContent($content);
+		$this->assertSame($content, $post->getContent($content));
+
+	}
+
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setExcerpt()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getExcerpt()
+	 */
+	public function testGetSetExcerpt()
+	{
+		$content = '<h1>h6</h1>';
+		$post = new WordPressPost();
+		$post->setExcerpt($content);
+		$this->assertSame($content, $post->getExcerpt($content));
+		$content = 'new execprt';
+		$post->setExcerpt($content);
+		$this->assertSame($content, $post->getExcerpt($content));
+
+	}
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setGuid()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getGuid()
+	 */
+	public function testGetSetGuid()
+	{
+		$content = 'https://caldera.lndo.site/?p=1';
+		$post = new WordPressPost();
+		$post->setGuid($content);
+		$this->assertSame($content, $post->getGuid($content));
+
+
+	}
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::toArray()
+	 */
 	public function testToFromArray()
 	{
 		$data = $this->getHelloWorld();
 		$post = WordPressPost::fromArray($data);
-		$this->assertSame( $data, $post->toArray());
+		$this->assertEquals( $data, $post->toArray());
 	}
+
+
 	protected function getHelloWorld()
 	{
 		return [
