@@ -18,6 +18,7 @@ class PostTypeFactoryTest extends TestCase
 	 */
 	public function testPostTypeWithMeta()
 	{
+
 		$data = new \stdClass();
 		$postTypeArgs = [ 'labels' => []];
 		$register = function ($calledName, $calledArgs) use ($data) {
