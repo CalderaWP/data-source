@@ -28,7 +28,9 @@ class PostTypeFactoryTest extends TestCase
 		$registerMeta= function () {
 		};
 		$dbFactory = new Factory();
-		$factory = new PostTypeFactory($register, $registerMeta, $dbFactory, \Mockery::mock(\wpdb::class));
+		$wpdb = \Mockery::mock(\wpdb::class);
+		$wpdb->prefix = 'wp_';
+		$factory = new PostTypeFactory($register, $registerMeta, $dbFactory, $wpdb);
 
 		$attribute  = Attribute::fromArray([
 			'name' => 'desc',

@@ -106,7 +106,6 @@ class PostTypeWithCustomMetaTable extends PostType
 					}
 				}
 			}
-			\WP_REST_Posts_Controller::
 			return $results;
 		}
 		return parent::findWhere($column, $value);
