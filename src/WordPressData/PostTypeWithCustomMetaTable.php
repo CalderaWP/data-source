@@ -132,14 +132,20 @@ class PostTypeWithCustomMetaTable extends PostType
 	 */
 	public function update(int $id, array $data): array
 	{
+		$post = get_post($id,ARRAY_A);
 		$prepared = $this->sortData($data);
 		try {
-			$metaRow = $this->getMetaTable()->read($id);
-			$this->getMetaTable()->update($metaRow[ 'id' ], $prepared[ 'meta' ]);
+			$metaRow = $this->getMetaTable()->findWhere('post_id', $post['ID']);
+			$metaData = $this->getMetaTable()->update($metaRow[ 'id' ], $prepared[ 'meta' ]);
 		} catch (\Exception $e) {
+			$metaData = [];
 		}
 
-		return parent::update($id, $data[ 'post' ]);
+		$_data = $prepared['post'];
+		unset($_data['meta']);
+		$data =  parent::update($post['ID'], $_data);
+		$data[ 'meta' ] = $metaData;
+		return $data;
 	}
 
 	protected function sortData($data)
@@ -164,8 +170,15 @@ class PostTypeWithCustomMetaTable extends PostType
 
 	public function read(int $id): array
 	{
-		$data = $this->findById($id);
-		return $data;
+		$post = parent::read($id);
+		$posts = $this->byPostId($post['ID']);
+		return ! empty($posts) ? $posts[0] : [];
+
+	}
+
+	protected function byPostId(int $postId )
+	{
+		return $this->findWhere( 'post_id', $postId );
 	}
 
 	/**
@@ -174,7 +187,8 @@ class PostTypeWithCustomMetaTable extends PostType
 	public function anonymize(int $id, string $column): array
 	{
 		if ($this->isMetaColumn($column)) {
-			return $this->getMetaTable()->anonymize($id, $column);
+			$post = parent::read($id);
+			return $this->getMetaTable()->anonymize($post['ID'], $column);
 		}
 		return parent::anonymize($id, $column);
 	}

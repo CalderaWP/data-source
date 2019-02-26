@@ -4,7 +4,10 @@ namespace calderawp\caldera\DataSource\Tests\Unit;
 
 use calderawp\caldera\DataSource\CalderaDataSource;
 use calderawp\caldera\DataSource\Tests\TestCase;
+use calderawp\caldera\DataSource\WordPressData\PostMeta;
+use calderawp\caldera\DataSource\WordPressData\PostType;
 use calderawp\caldera\DataSource\WordPressData\WordPressPost;
+
 class WpPostTest extends TestCase
 {
 
@@ -19,6 +22,7 @@ class WpPostTest extends TestCase
 		$post->setId(7);
 		$this->assertSame(7, $post->getId());
 	}
+
 	/**
 	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setTitle()
 	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getTitle()
@@ -79,13 +83,82 @@ class WpPostTest extends TestCase
 	}
 
 	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getMeta()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setMeta()
+	 */
+	public function testGetSetMeta()
+	{
+		$meta = new PostMeta();
+		$meta[ 'r22' ] = 'type1';
+		$post = new WordPressPost();
+		$post->setMeta($meta);
+		$this->assertEquals($meta, $post->getMeta());
+		$this->assertEquals('type1', $post->getMeta()[ 'r22' ]);
+	}
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::getMeta()
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::setMeta()
+	 */
+	public function testGetSetMetaValues()
+	{
+
+		$post = new WordPressPost();
+		$post->setMetaValue('r34', 'v1');
+		$this->assertEquals('v1', $post->getMetaValue('r34', 'DO NOT USE ME, I AM SET!'));
+		$this->assertEquals('v22', $post->getMetaValue('r344444', 'v22'));
+	}
+
+	/**
 	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::toArray()
 	 */
 	public function testToFromArray()
 	{
 		$data = $this->getHelloWorld();
 		$post = WordPressPost::fromArray($data);
-		$this->assertEquals( $data, $post->toArray());
+		$data[ 'meta' ] = [
+			'post_id' => $data['id']
+		];
+		$this->assertEquals($data, $post->toArray());
+	}
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::toArray()
+	 */
+	public function testMetaToArray()
+	{
+		$post = new WordPressPost();
+		$post->setId(12);
+		$post->setMetaValue('r34', 'v1');
+		$array = $post->toArray();
+		$this->assertEquals([
+			'r34' => 'v1',
+			'post_id' => 12,
+		], $array[ 'meta' ]);
+	}
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::fromArray()
+	 */
+	public function testMetaFromArray()
+	{
+		$post = WordPressPost::fromArray( ['id' => 12, 'meta' => [ 'r34' => 'v1']]);
+		$array = $post->toArray();
+		$this->assertEquals([
+			'r34' => 'v1',
+			'post_id' => 12,
+		], $array[ 'meta' ]);
+	}
+
+	public function testResultToPost()
+	{
+		$data = $this->getHelloWorld();
+		$postType = new PostType('a');
+		$post = $postType->resultToPost($data, new PostMeta());
+		$value = 'c4567';
+
+		$meta = new PostMeta(['meta_one' => $value]);
+		$post = WordPressPost::fromArray($data, $meta);
+		$this->assertEquals($post->getExcerpt(), ($postType->resultToPost($data,new PostMeta(['post_id' => 1])))->getExcerpt());
 	}
 
 
@@ -96,9 +169,9 @@ class WpPostTest extends TestCase
 			'date' => '2018-12-28T14:55:53',
 			'date_gmt' => '2018-12-28T14:55:53',
 			'guid' =>
-				array (
+				[
 					'rendered' => 'https://caldera.lndo.site/?p=1',
-				),
+				],
 			'modified' => '2018-12-30T03:08:35',
 			'modified_gmt' => '2018-12-30T03:08:35',
 			'slug' => 'hello-world',
@@ -106,22 +179,22 @@ class WpPostTest extends TestCase
 			'type' => 'post',
 			'link' => 'https://caldera.lndo.site/hello-world/',
 			'title' =>
-				array (
+				[
 					'rendered' => 'Hello world!',
-				),
+				],
 			'content' =>
-				array (
+				[
 					'rendered' => '
 <p >Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>
 ',
 					'protected' => false,
-				),
+				],
 			'excerpt' =>
-				array (
+				[
 					'rendered' => '<p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing!</p>
 ',
 					'protected' => false,
-				),
+				],
 			'author' => 1,
 			'featured_media' => 0,
 			'comment_status' => 'open',
@@ -130,15 +203,15 @@ class WpPostTest extends TestCase
 			'template' => '',
 			'format' => 'standard',
 			'meta' =>
-				array (
-				),
+				[
+				],
 			'categories' =>
-				array (
+				[
 					0 => 1,
-				),
+				],
 			'tags' =>
-				array (
-				),
+				[
+				],
 		];
 	}
 }

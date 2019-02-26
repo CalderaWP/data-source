@@ -3,7 +3,7 @@
 
 namespace calderawp\caldera\DataSource\WordPressData;
 
-
+use calderawp\caldera\DataSource\Contracts\PostMetaContract as PostMeta;
 use calderawp\caldera\DataSource\WordPressData\Contracts\PostContract as Post;
 use calderawp\caldera\Messaging\Traits\SimpleRepository;
 
@@ -12,7 +12,6 @@ class WordPressPost implements Post
 
 	use SimpleRepository;
 
-
 	/**
 	 * Get post Id
 	 *
@@ -20,7 +19,7 @@ class WordPressPost implements Post
 	 */
 	public function getId(): int
 	{
-		return $this->get('id', 0);
+		return (int) $this->get('id', 0);
 	}
 
 	/**
@@ -129,6 +128,57 @@ class WordPressPost implements Post
 
 	}
 
+	/**
+	 * Set all post meta
+	 *
+	 * @param PostMeta $meta
+	 *
+	 * @return Post
+	 */
+	public function setMeta( PostMeta $meta ) : Post
+	{
+		return $this->set( 'meta', $meta );
+
+	}
+
+	/**
+	 * Get a post meta value
+	 *
+	 * @param string $key
+	 * @param null|mixed $default
+	 *
+	 * @return mixed|null
+	 */
+	public function getMetaValue(string  $key, $default = null )
+	{
+		return $this->getMeta()->getMeta($key,$default);
+	}
+
+	/**
+	 * Set a post meta value
+	 *
+	 * @param string $key
+	 * @param $value
+	 *
+	 * @return Post
+	 */
+	public function setMetaValue(string $key, $value ): Post
+	{
+		return $this->setMeta(
+			$this->getMeta()->updateMeta($key,$value)
+		);
+	}
+
+	/**
+	 * Get all post meta
+	 *
+	 * @return PostMeta
+	 */
+	public function getMeta(): PostMeta
+	{
+		return $this->get( 'meta', new \calderawp\caldera\DataSource\WordPressData\PostMeta(['post_id' => $this->getId() ]) );
+	}
+
 
 	public function getAllowedProperties(): array
 	{
@@ -158,6 +208,17 @@ class WordPressPost implements Post
 			'link',
 
 		];
+	}
+
+	public function toArray(): array
+	{
+
+		$array = parent::toArray();
+		if( ! is_array( $array['meta'])){
+			$array['meta'] = [];
+		}
+		$array['meta']['post_id'] = $this->getId();
+		return $array;
 	}
 
 	public static function fromArray(array $items = []): WordPressPost

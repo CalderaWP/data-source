@@ -8,6 +8,8 @@ use calderawp\caldera\DataSource\Exception;
 use calderawp\caldera\Messaging\Traits\SimpleRepository;
 use calderawp\DB\Exceptions\InvalidColumnException;
 use WpDbTools\Type\Result;
+use calderawp\caldera\DataSource\WordPressData\Contracts\PostContract as Post;
+
 
 class PostType implements WordPressPostTypeContract
 {
@@ -16,6 +18,14 @@ class PostType implements WordPressPostTypeContract
 	public function __construct(string $postType)
 	{
 		$this->postType = $postType;
+	}
+
+	/** @inheritdoc */
+	public function resultToPost(array $data, ?PostMeta $meta ): Post
+	{
+		$post =  WordPressPost::fromArray($data);
+		$post->setMeta($meta);
+		return $post;
 	}
 
 	/**
@@ -37,7 +47,7 @@ class PostType implements WordPressPostTypeContract
 	{
 		$post = get_post($id, ARRAY_A);
 		if (is_array($post)) {
-			return  WordPressPost::fromArray($post);
+			return  $post;
 		}
 		throw new Exception('Not Found', 404);
 	}

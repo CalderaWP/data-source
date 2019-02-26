@@ -44,9 +44,8 @@ class PostTypeTest extends TestCase
 	/** @covers \calderawp\caldera\DataSource\WordPressData\PostType::delete() */
 	public function testDelete()
 	{
-		$wpQuery = \Mockery::mock('\WP_Query');
 		Functions\when('wp_delete_post')->justReturn(['post_title' => 'adsasd']);
-		$postType = new PostType('a', $wpQuery);
+		$postType = new PostType('a');
 		$this->assertTrue($postType->delete(1));
 	}
 
@@ -148,4 +147,6 @@ class PostTypeTest extends TestCase
 		$postType = new PostType('a');
 		$this->assertSame($expected, $postType->findIn([1,2], 'ID'));
 	}
+
+
 }
