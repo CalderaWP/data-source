@@ -137,6 +137,7 @@ class WordPressPost implements Post
 	 */
 	public function setMeta( PostMeta $meta ) : Post
 	{
+		$meta->updateMeta('post_id',$this->getId());
 		return $this->set( 'meta', $meta );
 
 	}
@@ -210,10 +211,19 @@ class WordPressPost implements Post
 		];
 	}
 
+	/** @inheritdoc */
 	public function toArray(): array
 	{
-
-		$array = parent::toArray();
+		$array = [];
+		foreach ( $this->getAllowedProperties() as $property ){
+			if ($this->has($property)) {
+				$value = $this->get($property);
+				if( is_object( $value) && is_callable([$value, 'toArray'])){
+					$value = $value->toArray();
+				}
+				$array[ $property ] = $value;
+			}
+		}
 		if( ! is_array( $array['meta'])){
 			$array['meta'] = [];
 		}

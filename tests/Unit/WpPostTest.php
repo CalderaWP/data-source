@@ -125,11 +125,27 @@ class WpPostTest extends TestCase
 	/**
 	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::toArray()
 	 */
+	public function testExcerptToArray()
+	{
+		$post = new WordPressPost();
+		$post->setId(12);
+		$post->setExcerpt( 'Hi Roy' );
+		$post->setMetaValue('r388', 'v1');
+		$array = $post->toArray();
+		$this->assertEquals( [ 'rendered' => 'Hi Roy'], $array[ 'excerpt' ] );
+
+	}
+
+	/**
+	 * @covers \calderawp\caldera\DataSource\WordPressData\WordPressPost::toArray()
+	 */
 	public function testMetaToArray()
 	{
 		$post = new WordPressPost();
 		$post->setId(12);
+		$post->setExcerpt( 'Hi Roy' );
 		$post->setMetaValue('r34', 'v1');
+		$this->assertEquals( 'v1', $post->getMetaValue('r34') );
 		$array = $post->toArray();
 		$this->assertEquals([
 			'r34' => 'v1',

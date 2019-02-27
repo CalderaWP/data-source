@@ -160,4 +160,5 @@ class PostType implements WordPressPostTypeContract
 	{
 		return $this->postType;
 	}
+
 }

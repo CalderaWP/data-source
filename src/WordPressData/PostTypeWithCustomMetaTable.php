@@ -227,4 +227,6 @@ class PostTypeWithCustomMetaTable extends PostType
 	{
 		return $this->getMetaTable()->isAllowedKey($column);
 	}
+
+
 }

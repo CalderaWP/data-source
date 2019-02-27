@@ -3,8 +3,9 @@
 namespace calderawp\caldera\DataSource\WordPressData\Contracts;
 
 use calderawp\caldera\DataSource\WordPressData\WordPressPost;
+use calderawp\interop\Contracts\Arrayable;
 
-interface PostContract
+interface PostContract extends Arrayable
 {
 	/**
 	 * Get post Id
