@@ -78,35 +78,30 @@ class PostTypeWithCustomMetaTable extends PostType
 	/** @inheritdoc */
 	public function findIn(array $ins, string $column): array
 	{
+
 		if ($this->isMetaColumn($column)) {
-			return $this->getMetaTable()->findIn($ins, $column);
+			$metaResults = $this->getMetaTable()->findIn($ins, $column);
+			return $this->collectPostsFromMetaResults($metaResults);
+		}else{
+			$posts = parent::findIn($ins,$column);
+
+			if( ! empty($posts)){
+				$postIds = array_column($posts, 'ID' );
+				$metaResults = $this->getMetaTable()->findIn($postIds, 'post_id');
+				return $this->collectPostsFromMetaResults($metaResults);
+
+			}
+
 		}
 
-		return parent::findIn($ins, $column);
 	}
 
 	/** @inheritdoc */
 	public function findWhere(string $column, $value): array
 	{
 		if ($this->isMetaColumn($column)) {
-			$results = [];
 			$metaResults =  $this->getMetaTable()->findWhere($column, $value);
-			$postIds = [];
-			foreach ( $metaResults as $result ){
-				$postIds[] = $result[ 'post_id'];
-			}
-			$posts = parent::findIn( $postIds, 'ID');
-			foreach ( $posts as $post ){
-				foreach ($metaResults as $i =>  $result ){
-					if( $post['ID'] == $result[ 'post_id']){
-
-						$results[] = array_merge((array)$post, ['meta' => $result ] );
-						unset($metaResults[$i]);
-						break;
-					}
-				}
-			}
-			return $results;
+			return $this->collectPostsFromMetaResults($metaResults);
 		}
 		return parent::findWhere($column, $value);
 	}
@@ -211,14 +206,14 @@ class PostTypeWithCustomMetaTable extends PostType
 	 */
 	public function findById(int $id): array
 	{
-		$data = $this->getMetaTable()->findById($id);
-		if( ! empty( $data) && isset( $data[0])){
-			$meta = $data[0];
-			$postId = $meta['post_id'];
-			$data = array_merge(parent::read($postId),['meta' => $meta ]);
-			return $data;
+		$post = parent::read($id);
+		$metaData = $this->getMetaTable()->findWhere('post_id', $id );
+		if (is_array($metaData) && ! empty( $metaData )) {
+			$post[ 'meta' ] = isset($metaData[ 0 ]) ? $metaData[ 0 ] : [];
+		} else {
+			$post[ 'meta' ] = [];
 		}
-		return [];
+		return $post;
 
 	}
 
@@ -226,6 +221,35 @@ class PostTypeWithCustomMetaTable extends PostType
 	protected function isMetaColumn(string $column): bool
 	{
 		return $this->getMetaTable()->isAllowedKey($column);
+	}
+
+	/**
+	 * @param array $metaResults
+	 *
+	 * @return array
+	 * @throws InvalidColumnException
+	 */
+	protected function collectPostsFromMetaResults(array $metaResults): array
+	{
+		$results = [];
+
+		if (! empty( $metaResults )) {
+			foreach ($metaResults as $result) {
+				$postIds[] = $result[ 'post_id' ];
+			}
+			$postIds = [];
+			$posts = parent::findIn($postIds, 'ID');
+			foreach ($posts as $post) {
+				foreach ($metaResults as $i => $result) {
+					if ($post[ 'ID' ] == $result[ 'post_id' ]) {
+						$results[] = array_merge((array)$post, ['meta' => $result]);
+						unset($metaResults[ $i ]);
+						break;
+					}
+				}
+			}
+		}
+		return $results;
 	}
 
 
