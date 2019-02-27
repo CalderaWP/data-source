@@ -98,7 +98,7 @@ class PostTypeWithCustomMetaTable extends PostType
 			$posts = parent::findIn( $postIds, 'ID');
 			foreach ( $posts as $post ){
 				foreach ($metaResults as $i =>  $result ){
-					if( $post->ID == $result[ 'post_id']){
+					if( $post['ID'] == $result[ 'post_id']){
 
 						$results[] = array_merge((array)$post, ['meta' => $result ] );
 						unset($metaResults[$i]);

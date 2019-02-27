@@ -123,7 +123,8 @@ class PostType implements WordPressPostTypeContract
 		}
 		$args = [
 			'post_type' => $this->getPostType(),
-			'post_status' => 'any'
+			'post_status' => 'any',
+			'fields' => 'ids'
 		];
 
 		switch ($column) {
@@ -134,7 +135,15 @@ class PostType implements WordPressPostTypeContract
 				$args[ 'post_parent__in'] = $ins;
 				break;
 		}
-		return get_posts($args);
+		$posts = get_posts($args);
+		$results = [];
+		if( ! empty( $posts ) ){
+			foreach ($posts as $postID ){
+				$results[] = get_post($postID,ARRAY_A);
+			}
+		}
+
+		return $results;
 	}
 
 	/**
