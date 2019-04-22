@@ -2,6 +2,7 @@
 
 
 namespace calderawp\caldera\DataSource\Contracts;
+
 use calderawp\caldera\DataSource\WordPressData\Contracts\PostContract as Post;
 use calderawp\caldera\DataSource\WordPressData\PostMeta;
 
@@ -26,6 +27,5 @@ interface WordPressPostTypeContract extends SourceContract
 	 *
 	 * @return Post
 	 */
-	public function resultToPost(array $data, ?PostMeta $meta ) : Post;
-
+	public function resultToPost(array $data, ?PostMeta $meta) : Post;
 }

@@ -3,7 +3,6 @@
 
 namespace calderawp\caldera\DataSource\WordPressData;
 
-
 use calderawp\caldera\DataSource\Contracts\PostMetaContract;
 use calderawp\interop\ArrayLike;
 
@@ -18,7 +17,7 @@ class PostMeta extends ArrayLike implements PostMetaContract
 	 *
 	 * @return mixed|null
 	 */
-	public function getMeta( string $key, $default = null )
+	public function getMeta(string $key, $default = null)
 	{
 		return $this->offsetExists($key) ? $this->offsetGet($key) : $default;
 	}
@@ -31,10 +30,9 @@ class PostMeta extends ArrayLike implements PostMetaContract
 	 *
 	 * @return PostMeta
 	 */
-	public function updateMeta(string $key, $value ) : PostMetaContract
+	public function updateMeta(string $key, $value) : PostMetaContract
 	{
-		 $this->offsetSet($key,$value);
+		 $this->offsetSet($key, $value);
 		return $this;
 	}
-
 }

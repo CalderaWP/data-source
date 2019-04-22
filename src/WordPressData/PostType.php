@@ -10,7 +10,6 @@ use calderawp\DB\Exceptions\InvalidColumnException;
 use WpDbTools\Type\Result;
 use calderawp\caldera\DataSource\WordPressData\Contracts\PostContract as Post;
 
-
 class PostType implements WordPressPostTypeContract
 {
 	/** @var string  */
@@ -21,7 +20,7 @@ class PostType implements WordPressPostTypeContract
 	}
 
 	/** @inheritdoc */
-	public function resultToPost(array $data, ?PostMeta $meta ): Post
+	public function resultToPost(array $data, ?PostMeta $meta): Post
 	{
 		$post =  WordPressPost::fromArray($data);
 		$post->setMeta($meta);
@@ -137,9 +136,9 @@ class PostType implements WordPressPostTypeContract
 		}
 		$posts = get_posts($args);
 		$results = [];
-		if( ! empty( $posts ) ){
-			foreach ($posts as $postID ){
-				$results[] = get_post($postID,ARRAY_A);
+		if (! empty($posts)) {
+			foreach ($posts as $postID) {
+				$results[] = get_post($postID, ARRAY_A);
 			}
 		}
 
@@ -169,5 +168,4 @@ class PostType implements WordPressPostTypeContract
 	{
 		return $this->postType;
 	}
-
 }

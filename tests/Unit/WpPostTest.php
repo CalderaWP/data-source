@@ -48,7 +48,6 @@ class WpPostTest extends TestCase
 		$content = 'new content';
 		$post->setContent($content);
 		$this->assertSame($content, $post->getContent($content));
-
 	}
 
 
@@ -65,7 +64,6 @@ class WpPostTest extends TestCase
 		$content = 'new execprt';
 		$post->setExcerpt($content);
 		$this->assertSame($content, $post->getExcerpt($content));
-
 	}
 
 	/**
@@ -78,8 +76,6 @@ class WpPostTest extends TestCase
 		$post = new WordPressPost();
 		$post->setGuid($content);
 		$this->assertSame($content, $post->getGuid($content));
-
-
 	}
 
 	/**
@@ -129,11 +125,10 @@ class WpPostTest extends TestCase
 	{
 		$post = new WordPressPost();
 		$post->setId(12);
-		$post->setExcerpt( 'Hi Roy' );
+		$post->setExcerpt('Hi Roy');
 		$post->setMetaValue('r388', 'v1');
 		$array = $post->toArray();
-		$this->assertEquals( [ 'rendered' => 'Hi Roy'], $array[ 'excerpt' ] );
-
+		$this->assertEquals([ 'rendered' => 'Hi Roy'], $array[ 'excerpt' ]);
 	}
 
 	/**
@@ -143,9 +138,9 @@ class WpPostTest extends TestCase
 	{
 		$post = new WordPressPost();
 		$post->setId(12);
-		$post->setExcerpt( 'Hi Roy' );
+		$post->setExcerpt('Hi Roy');
 		$post->setMetaValue('r34', 'v1');
-		$this->assertEquals( 'v1', $post->getMetaValue('r34') );
+		$this->assertEquals('v1', $post->getMetaValue('r34'));
 		$array = $post->toArray();
 		$this->assertEquals([
 			'r34' => 'v1',
@@ -157,7 +152,7 @@ class WpPostTest extends TestCase
 	 */
 	public function testMetaFromArray()
 	{
-		$post = WordPressPost::fromArray( ['id' => 12, 'meta' => [ 'r34' => 'v1']]);
+		$post = WordPressPost::fromArray(['id' => 12, 'meta' => [ 'r34' => 'v1']]);
 		$array = $post->toArray();
 		$this->assertEquals([
 			'r34' => 'v1',
@@ -174,7 +169,7 @@ class WpPostTest extends TestCase
 
 		$meta = new PostMeta(['meta_one' => $value]);
 		$post = WordPressPost::fromArray($data, $meta);
-		$this->assertEquals($post->getExcerpt(), ($postType->resultToPost($data,new PostMeta(['post_id' => 1])))->getExcerpt());
+		$this->assertEquals($post->getExcerpt(), ($postType->resultToPost($data, new PostMeta(['post_id' => 1])))->getExcerpt());
 	}
 
 

@@ -82,18 +82,15 @@ class PostTypeWithCustomMetaTable extends PostType
 		if ($this->isMetaColumn($column)) {
 			$metaResults = $this->getMetaTable()->findIn($ins, $column);
 			return $this->collectPostsFromMetaResults($metaResults);
-		}else{
-			$posts = parent::findIn($ins,$column);
+		} else {
+			$posts = parent::findIn($ins, $column);
 
-			if( ! empty($posts)){
-				$postIds = array_column($posts, 'ID' );
+			if (! empty($posts)) {
+				$postIds = array_column($posts, 'ID');
 				$metaResults = $this->getMetaTable()->findIn($postIds, 'post_id');
 				return $this->collectPostsFromMetaResults($metaResults);
-
 			}
-
 		}
-
 	}
 
 	/** @inheritdoc */
@@ -127,7 +124,7 @@ class PostTypeWithCustomMetaTable extends PostType
 	 */
 	public function update(int $id, array $data): array
 	{
-		$post = get_post($id,ARRAY_A);
+		$post = get_post($id, ARRAY_A);
 		$prepared = $this->sortData($data);
 		try {
 			$metaRow = $this->getMetaTable()->findWhere('post_id', $post['ID']);
@@ -155,7 +152,7 @@ class PostTypeWithCustomMetaTable extends PostType
 			}
 		}
 
-		if( empty( $prepared[ 'post' ]['post_title'] ) ){
+		if (empty($prepared[ 'post' ]['post_title'])) {
 			$prepared[ 'post' ][ 'post_title' ] = md5(serialize($prepared));
 		}
 		$prepared[ 'post' ]['post_type'] = $this->getPostType();
@@ -168,12 +165,11 @@ class PostTypeWithCustomMetaTable extends PostType
 		$post = parent::read($id);
 		$posts = $this->byPostId($post['ID']);
 		return ! empty($posts) ? $posts[0] : [];
-
 	}
 
-	protected function byPostId(int $postId )
+	protected function byPostId(int $postId)
 	{
-		return $this->findWhere( 'post_id', $postId );
+		return $this->findWhere('post_id', $postId);
 	}
 
 	/**
@@ -207,14 +203,13 @@ class PostTypeWithCustomMetaTable extends PostType
 	public function findById(int $id): array
 	{
 		$post = parent::read($id);
-		$metaData = $this->getMetaTable()->findWhere('post_id', $id );
-		if (is_array($metaData) && ! empty( $metaData )) {
+		$metaData = $this->getMetaTable()->findWhere('post_id', $id);
+		if (is_array($metaData) && ! empty($metaData)) {
 			$post[ 'meta' ] = isset($metaData[ 0 ]) ? $metaData[ 0 ] : [];
 		} else {
 			$post[ 'meta' ] = [];
 		}
 		return $post;
-
 	}
 
 
@@ -233,7 +228,7 @@ class PostTypeWithCustomMetaTable extends PostType
 	{
 		$results = [];
 
-		if (! empty( $metaResults )) {
+		if (! empty($metaResults)) {
 			foreach ($metaResults as $result) {
 				$postIds[] = $result[ 'post_id' ];
 			}
@@ -251,6 +246,4 @@ class PostTypeWithCustomMetaTable extends PostType
 		}
 		return $results;
 	}
-
-
 }

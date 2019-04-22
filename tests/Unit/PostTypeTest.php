@@ -147,6 +147,4 @@ class PostTypeTest extends TestCase
 		$postType = new PostType('a');
 		$this->assertSame($expected, $postType->findIn([1,2], 'ID'));
 	}
-
-
 }

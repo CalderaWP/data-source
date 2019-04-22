@@ -65,7 +65,6 @@ class WordPressPost implements Post
 	public function setExcerpt(string $excerpt): Post
 	{
 		return $this->setValueRepresentedWithArray($excerpt, 'excerpt');
-
 	}
 
 	/**
@@ -76,7 +75,6 @@ class WordPressPost implements Post
 	public function getExcerpt(): string
 	{
 		return $this->getItemThatIsRepresentedWithArray('excerpt')['rendered'];
-
 	}
 
 	/**
@@ -99,7 +97,6 @@ class WordPressPost implements Post
 	public function getContent(): string
 	{
 		return $this->getItemThatIsRepresentedWithArray('content')['rendered'];
-
 	}
 
 	/**
@@ -112,7 +109,6 @@ class WordPressPost implements Post
 	public function setGuid(string $guid): Post
 	{
 		return $this->setValueRepresentedWithArray($guid, 'guid');
-
 	}
 
 	/**
@@ -125,7 +121,6 @@ class WordPressPost implements Post
 	public function getGuid(): string
 	{
 		return $this->getItemThatIsRepresentedWithArray('guid')['rendered'];
-
 	}
 
 	/**
@@ -135,11 +130,10 @@ class WordPressPost implements Post
 	 *
 	 * @return Post
 	 */
-	public function setMeta( PostMeta $meta ) : Post
+	public function setMeta(PostMeta $meta) : Post
 	{
-		$meta->updateMeta('post_id',$this->getId());
-		return $this->set( 'meta', $meta );
-
+		$meta->updateMeta('post_id', $this->getId());
+		return $this->set('meta', $meta);
 	}
 
 	/**
@@ -150,9 +144,9 @@ class WordPressPost implements Post
 	 *
 	 * @return mixed|null
 	 */
-	public function getMetaValue(string  $key, $default = null )
+	public function getMetaValue(string  $key, $default = null)
 	{
-		return $this->getMeta()->getMeta($key,$default);
+		return $this->getMeta()->getMeta($key, $default);
 	}
 
 	/**
@@ -163,10 +157,10 @@ class WordPressPost implements Post
 	 *
 	 * @return Post
 	 */
-	public function setMetaValue(string $key, $value ): Post
+	public function setMetaValue(string $key, $value): Post
 	{
 		return $this->setMeta(
-			$this->getMeta()->updateMeta($key,$value)
+			$this->getMeta()->updateMeta($key, $value)
 		);
 	}
 
@@ -177,7 +171,7 @@ class WordPressPost implements Post
 	 */
 	public function getMeta(): PostMeta
 	{
-		return $this->get( 'meta', new \calderawp\caldera\DataSource\WordPressData\PostMeta(['post_id' => $this->getId() ]) );
+		return $this->get('meta', new \calderawp\caldera\DataSource\WordPressData\PostMeta(['post_id' => $this->getId() ]));
 	}
 
 
@@ -215,16 +209,16 @@ class WordPressPost implements Post
 	public function toArray(): array
 	{
 		$array = [];
-		foreach ( $this->getAllowedProperties() as $property ){
+		foreach ($this->getAllowedProperties() as $property) {
 			if ($this->has($property)) {
 				$value = $this->get($property);
-				if( is_object( $value) && is_callable([$value, 'toArray'])){
+				if (is_object($value) && is_callable([$value, 'toArray'])) {
 					$value = $value->toArray();
 				}
 				$array[ $property ] = $value;
 			}
 		}
-		if( ! is_array( $array['meta'])){
+		if (! is_array($array['meta'])) {
 			$array['meta'] = [];
 		}
 		$array['meta']['post_id'] = $this->getId();
@@ -289,6 +283,4 @@ class WordPressPost implements Post
 		$this->set($key, $item);
 		return $this;
 	}
-
-
 }
